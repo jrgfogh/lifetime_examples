@@ -7,7 +7,40 @@
 
 #pragma warning(pop)
 
+#include <future>
+#include <memory>
 
-TEST(lifetime_examples_tests, Foobar) {
-	ASSERT_EQ(1, 1);
+TEST(lifetime_examples_tests, NoInput) {
+	auto fut = std::async([]() {
+			std::cout << "Hello world!" << std::endl;
+		});
+	fut.get();
+}
+
+TEST(lifetime_examples_tests, ValueInput) {
+	auto inputA = 25;
+	auto fut = std::async([inputA](int inputB) {
+			std::cout << "Input A: " << inputA << std::endl;
+			std::cout << "Input B: " << inputB << std::endl;
+		}, 16);
+	fut.get();
+}
+
+TEST(lifetime_examples_tests, ExclusiveOwnership) {
+	auto inputA = std::make_unique<int>(25);
+	auto fut = std::async([inputA = std::move(inputA)](std::unique_ptr<int> inputB) {
+			std::cout << "Input A: " << *inputA << std::endl;
+			std::cout << "Input B: " << *inputB << std::endl;
+		}, std::make_unique<int>(16));
+	fut.get();
+}
+
+TEST(lifetime_examples_tests, SharedOwnership) {
+	auto inputA = std::make_shared<int>(25);
+	auto fut = std::async([inputA = inputA](std::shared_ptr<int> inputB) {
+			std::cout << "Input A: " << *inputA << std::endl;
+			std::cout << "Input B: " << *inputB << std::endl;
+		}, std::make_shared<int>(16));
+	std::cout << "Input B: " << *inputA << std::endl;
+	fut.get();
 }
