@@ -26,5 +26,5 @@ FetchContent_MakeAvailable(
 
 enable_testing()
 
-# Include sub-projects.
 add_subdirectory ("tests")
+add_subdirectory ("benchmarks")
