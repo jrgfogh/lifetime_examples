@@ -16,7 +16,12 @@ static void BM_Allocate(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_Allocate)->Repetitions(10)->ThreadRange(1, 8)->UseRealTime()->MeasureProcessCPUTime();
+BENCHMARK(BM_Allocate)
+    ->Repetitions(10)
+    ->ThreadRange(1, 16)
+    ->UseRealTime()
+    ->MeasureProcessCPUTime()
+    ->Unit(benchmark::kMillisecond);
 
 static void BM_FreeSameThread(benchmark::State& state) {
     for (auto _ : state) {
@@ -27,7 +32,12 @@ static void BM_FreeSameThread(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_FreeSameThread)->Repetitions(10)->ThreadRange(1, 8)->UseRealTime()->MeasureProcessCPUTime();
+BENCHMARK(BM_FreeSameThread)
+    ->Repetitions(10)
+    ->ThreadRange(1, 16)
+    ->UseRealTime()
+    ->MeasureProcessCPUTime()
+    ->Unit(benchmark::kMillisecond);
 
 struct shared_state {
     explicit shared_state(size_t size) :
@@ -59,7 +69,12 @@ static void BM_FreeOtherThread(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_FreeOtherThread)->Repetitions(10)->ThreadRange(1, 16)->UseRealTime()->MeasureProcessCPUTime();
+BENCHMARK(BM_FreeOtherThread)
+    ->Repetitions(10)
+    ->ThreadRange(1, 16)
+    ->UseRealTime()
+    ->MeasureProcessCPUTime()
+    ->Unit(benchmark::kMillisecond);
 
 // TODO: Missing benchmarks:
 // 1. Shuffled data.
